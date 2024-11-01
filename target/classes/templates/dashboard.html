@@ -121,6 +121,7 @@
         <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link" href="/transactions">Transactions</a></li>
         <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        <li class="nav-item"><a class="nav-link" href="/changePassword">Change Password</a></li>
     </ul>
 </nav>
 
@@ -189,8 +190,7 @@
                 </form>
             </div>
         </div>
-        <p class="text-center mt-3"><a href="/admin/accounts" class="custom-link">Admin</a></p>
-        <p class="text-center mt-3"><a href="/changePassword" class="custom-link">ChangePassword</a></p>
+
     </div>
 
     <p th:if="${error != null}" th:text="${error}" class="error text-center mt-3"></p>

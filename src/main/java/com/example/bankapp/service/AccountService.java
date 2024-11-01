@@ -104,12 +104,12 @@ public class AccountService implements UserDetailsService {
             throw new RuntimeException("user does not exist");
         }
         Optional<Account> account = accountRepository.findByUsername(accountDTO.getUsername());
-        if (account.isPresent() && passwordEncoder.matches(accountDTO.getRepeatpassword(), account.get().getPassword())) {
+        if (account.isPresent() && passwordEncoder.matches(accountDTO.getRepeatpassword(), account.get().getPassword())&& account.get().getIdentificationNumber().equals(accountDTO.getIdentificationNumber())&& account.get().getPhoneNumber().equals(accountDTO.getPhoneNumber())&& account.get().getBirthdate().equals(accountDTO.getBirthdate())) {
             Account updatedAccount = accountMapper.toEntity(accountDTO, account.get());
             accountRepository.save(updatedAccount);
             return true;
         } else {
-            throw new RuntimeException("Password invalid");
+            throw new RuntimeException("information does not match");
         }
     }
 
@@ -119,7 +119,7 @@ public class AccountService implements UserDetailsService {
             throw new RuntimeException("user does not exist");
         }
         Optional<Account> account = accountRepository.findByUsername(accountDTO.getUsername());
-        if (account.isPresent() && accountDTO.getPassword().equals(accountDTO.getRepeatpassword())) {
+        if (account.isPresent() && accountDTO.getPassword().equals(accountDTO.getRepeatpassword())&& account.get().getIdentificationNumber().equals(accountDTO.getIdentificationNumber())&& account.get().getPhoneNumber().equals(accountDTO.getPhoneNumber())&& account.get().getBirthdate().equals(accountDTO.getBirthdate())) {
             Account updatedAccount = accountMapper.toEntity(accountDTO, account.get());
             accountRepository.save(updatedAccount);
             return true;
@@ -221,7 +221,7 @@ public class AccountService implements UserDetailsService {
 
         Transaction creditTransaction = new Transaction(
                 amount,
-                "Transfer in to " + fromAccount.getUsername(),
+                "Transfer in from " + fromAccount.getUsername(),
                 toAccount,
                 LocalDateTime.now()
         );

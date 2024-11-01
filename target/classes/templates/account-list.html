@@ -15,6 +15,28 @@
       color: #333;
     }
 
+    /* Navbar styles */
+    .navbar {
+      display: flex;
+      justify-content: flex-end;
+      background-color: #4CAF50;
+      padding: 10px 20px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      font-weight: bold;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .navbar a:hover {
+      background-color: #45a049;
+    }
+
+    /* Table styles */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -37,16 +59,19 @@
       background-color: #f1f1f1;
     }
 
-    button {
+    /* Button styles */
+    button, .logout-button {
       background-color: #ff4d4d;
       color: white;
       padding: 8px 12px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
     }
 
-    button:hover {
+    button:hover, .logout-button:hover {
       background-color: #ff3333;
     }
 
@@ -71,15 +96,22 @@
   </style>
 </head>
 <body>
+<!-- Navbar with Logout Button -->
+<nav class="navbar">
+  <a th:href="@{/logout}" class="logout-button">Logout</a>
+</nav>
+
 <h1>Account List</h1>
+
+<!-- Account Table -->
 <table>
   <tr>
     <th>ID</th>
     <th>Username</th>
     <th>Balance</th>
-    <th>identificationNumber</th>
-    <th>phoneNumber</th>
-    <th>birthdate</th>
+    <th>Identification Number</th>
+    <th>Phone Number</th>
+    <th>Birthdate</th>
     <th>Actions</th>
   </tr>
   <tr th:each="account : ${accounts}">
@@ -94,15 +126,7 @@
         <input type="hidden" name="_method" value="delete"/>
         <button type="submit">Delete</button>
       </form>
-
-        <a th:href="@{/admin/updateUser/{id}(id=${account.id})}" class="custom-link">Update</a>
-
-
-
-      <!--      <form th:action="@{/UpdateUser/{id}(id=${account.id})}" method="post">-->
-<!--        <input type="hidden" name="_method" value="put"/>-->
-<!--        <button type="submit">Update</button>-->
-<!--      </form>-->
+      <a th:href="@{/admin/updateUser/{id}(id=${account.id})}" class="custom-link">Update</a>
     </td>
   </tr>
 </table>
