@@ -40,6 +40,11 @@ public class AccountService implements UserDetailsService {
      {
          return accountRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Account not found") );
      }
+    public Account searchByIdentificationNumber(String identificationNumber) {
+
+        return accountRepository.findByIdentificationNumber(identificationNumber).orElseThrow(() -> new RuntimeException("Account not found"));
+
+    }
 
     public AccountDTO findAccountById(Long id)
     {
@@ -53,8 +58,6 @@ public class AccountService implements UserDetailsService {
     {
         return accountRepository.findAll();
     }
-
-
      public Account registerAccount(AccountDTO accountDTO)
      {
          if(accountRepository.findByUsername(accountDTO.getUsername()).isPresent())
@@ -64,6 +67,11 @@ public class AccountService implements UserDetailsService {
          if(!accountDTO.getPassword().equals(accountDTO.getRepeatpassword())){
 
              throw new RuntimeException("password invalid");
+
+         }
+         if(accountRepository.findByIdentificationNumber(accountDTO.getIdentificationNumber()).isPresent()){
+
+             throw new RuntimeException("IdentificationNumber already");
 
          }
          HashSet<String> roles = new HashSet<>();

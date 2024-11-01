@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 @RequestMapping("/admin")
 @Controller
@@ -35,6 +38,7 @@ public class AdminController {
     }
 
 
+
     @GetMapping("/accounts")
     public String listAccounts(Model model) {
         // Lấy danh sách tài khoản và thêm vào model
@@ -47,6 +51,17 @@ public class AdminController {
 
         model.addAttribute("accountDTO",accountService.findAccountById(id));
         return "updateUser";
+    }
+    @GetMapping("/searchByIdentificationNumber")
+    public String  searchByIdentificationNumber(@RequestParam String identificationNumber,Model model, RedirectAttributes redirectAttributes) {
+        try {
+            model.addAttribute("accounts",accountService.searchByIdentificationNumber(identificationNumber));
+            return "account-list";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/admin/accounts";
+
+        }
     }
 
     @PostMapping("/updateUser")

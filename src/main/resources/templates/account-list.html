@@ -100,6 +100,11 @@
 <nav class="navbar">
   <a th:href="@{/logout}" class="logout-button">Logout</a>
 </nav>
+<form th:action="@{/admin/searchByIdentificationNumber}" method="get">
+  <label>Identification Number:</label>
+  <input type="text" name="identificationNumber" required />
+  <button type="submit">Search</button>
+</form>
 
 <h1>Account List</h1>
 
@@ -129,6 +134,9 @@
       <a th:href="@{/admin/updateUser/{id}(id=${account.id})}" class="custom-link">Update</a>
     </td>
   </tr>
+  <div th:if="${error}" class="alert alert-danger mt-3 text-center">
+    <p th:text="${error}"></p>
+  </div>
 </table>
 </body>
 </html>
