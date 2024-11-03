@@ -3,6 +3,7 @@ package com.example.bankapp.controller;
 import com.example.bankapp.model.Account;
 import com.example.bankapp.model.Transaction;
 import com.example.bankapp.service.AccountService;
+import com.example.bankapp.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -18,6 +19,8 @@ public class BankController {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private BankService bankService;
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
@@ -38,7 +41,7 @@ public class BankController {
     public String deposit(@RequestParam BigDecimal amount) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = accountService.findAccountByUsername(username);
-        accountService.deposit(account,amount);
+        bankService.deposit(account,amount);
         return "redirect:/dashboard";
     }
     @PostMapping("/withdraw")
@@ -46,7 +49,7 @@ public class BankController {
         String username =SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = accountService.findAccountByUsername(username);
         try{
-            accountService.withdraw(account, amount);
+            bankService.withdraw(account, amount);
         }catch ( RuntimeException e)
         {
             model.addAttribute("error", e.getMessage());
@@ -59,7 +62,7 @@ public class BankController {
     public String transactionHistory (Model model){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = accountService.findAccountByUsername(username);
-        List<Transaction> transactions =  accountService.getTransactionHistory(account);
+        List<Transaction> transactions =  bankService.getTransactionHistory(account);
         model.addAttribute("transactions",transactions);
         return "transactions";
     }
@@ -69,7 +72,7 @@ public class BankController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Account fromAccount = accountService.findAccountByUsername(username);
         try{
-            accountService.transferAmount(fromAccount , toUsername, amount);
+            bankService.transferAmount(fromAccount , toUsername, amount);
         }catch(RuntimeException e){
             model.addAttribute("error", e.getMessage());
             model.addAttribute("account", fromAccount);

@@ -3,6 +3,7 @@ package com.example.bankapp.controller;
 import com.example.bankapp.dto.AccountDTO;
 import com.example.bankapp.model.Account;
 import com.example.bankapp.service.AccountService;
+import com.example.bankapp.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class AdminController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AdminService adminService;
+
     @ExceptionHandler(Exception.class)
     public String allException( Model model){
         model.addAttribute("error",  "ban khong co quyen truy cap");
@@ -30,7 +34,7 @@ public class AdminController {
     @RequestMapping(value = "/accounts/{id}", method = {RequestMethod.DELETE, RequestMethod.POST})
     public String deleteAccount(@PathVariable Long id) {
         try {
-            accountService.deleteAccountById(id);
+            adminService.deleteAccountById(id);
             return "redirect:/admin/accounts";
         } catch (RuntimeException e) {
             return "error";
@@ -42,20 +46,20 @@ public class AdminController {
     @GetMapping("/accounts")
     public String listAccounts(Model model) {
         // Lấy danh sách tài khoản và thêm vào model
-        model.addAttribute("accounts", accountService.getAllAccounts());
+        model.addAttribute("accounts", adminService.getAllAccounts());
         return "account-list";
     }
 
     @GetMapping("/updateUser/{id}")
     public String getAccount(@PathVariable Long id,Model model) {
 
-        model.addAttribute("accountDTO",accountService.findAccountById(id));
+        model.addAttribute("accountDTO",adminService.findAccountById(id));
         return "updateUser";
     }
     @GetMapping("/searchByIdentificationNumber")
     public String  searchByIdentificationNumber(@RequestParam String identificationNumber,Model model, RedirectAttributes redirectAttributes) {
         try {
-            model.addAttribute("accounts",accountService.searchByIdentificationNumber(identificationNumber));
+            model.addAttribute("accounts",adminService.searchByIdentificationNumber(identificationNumber));
             return "account-list";
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -71,7 +75,7 @@ public class AdminController {
             return "updateUser";
         }
         try {
-            accountService.UpdateAccount(accountDTO);
+            adminService.UpdateAccount(accountDTO);
             return "redirect:/admin/accounts";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
